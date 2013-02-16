@@ -28,6 +28,11 @@
             android:name=".AcercaDe"
             android:theme="@android:style/Theme.Dialog"
             ></activity>
+        <activity 
+            android:label="@string/Acercade" 
+            android:name=".Preferencias"
+            ></activity>
+
     </application>
 
 </manifest>
