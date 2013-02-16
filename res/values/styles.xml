@@ -16,5 +16,16 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    
+    <style name="TextoAsteroides">
+		<item name="android:textSize">20sp</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+	
+    <style name="TextoAsteroides.Botones">
+		<item name="android:textSize">16sp</item>
+		<item name="android:textStyle">italic</item>
+	</style>
+    
 
 </resources>
