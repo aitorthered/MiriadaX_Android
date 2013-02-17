@@ -7,7 +7,7 @@
     <string name="Arrancar">Play</string>
     <string name="Configurar">Settings</string>
     <string name="Acercade">About </string>
-    <string name="Salir">Exit</string>
+    <string name="Salir">Scores</string>
     <string name="tituloAplicacion">Asteroids</string>
     <string name="hello">Hello World, Asteroids! </string>
     <string name="app_name">Asteroids</string>
