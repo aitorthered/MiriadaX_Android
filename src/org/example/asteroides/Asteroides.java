@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class Localizacion extends Activity {
+public class Asteroides extends Activity {
+
+	public static AlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,9 +21,23 @@ public class Localizacion extends Activity {
 		Button bSalir =(Button) findViewById(R.id.Button04);
 		bSalir.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				finish();
+				lanzarPuntuaciones(view);
 			}
 		});
+		
+		bSalir =(Button) findViewById(R.id.Button03);
+		bSalir.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				lanzarAcercaDe(null);
+			}
+		});
+		bSalir =(Button) findViewById(R.id.Button02);
+		bSalir.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				lanzarPreferencias(null);
+			}
+		});
+
 	}
 
 	@Override
@@ -37,9 +53,9 @@ public class Localizacion extends Activity {
 		case R.id.acercaDe:
 			lanzarAcercaDe(null);
 			break;
-		 case R.id.config:
-             lanzarPreferencias(null);
-             break;
+		case R.id.config:
+			lanzarPreferencias(null);
+			break;
 		}
 		return true; /** true -> consumimos el item, no se propaga*/
 	}
@@ -51,5 +67,13 @@ public class Localizacion extends Activity {
 	public void lanzarPreferencias(View view){
 		Intent i = new Intent(this, Preferencias.class);
 		startActivity(i);
+	}
+
+	public void lanzarPuntuaciones(View view) {
+
+		Intent i = new Intent(this, Puntuaciones.class);
+
+		startActivity(i);
+
 	}
 }
