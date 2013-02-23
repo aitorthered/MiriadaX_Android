@@ -12,7 +12,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AsteroidesTheme" >
         <activity
             android:name="org.example.asteroides.Asteroides"
             android:label="@string/app_name" >
@@ -26,7 +26,7 @@
         <activity 
             android:label="@string/Acercade" 
             android:name=".AcercaDe"
-            android:theme="@android:style/Theme.Dialog"
+            android:theme="@style/AsteroidesThemeDialog"
             ></activity>
         <activity 
             android:label="@string/Acercade" 

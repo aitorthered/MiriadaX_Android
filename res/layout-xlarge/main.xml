@@ -16,43 +16,32 @@
         android:text="@string/tituloAplicacion"
         android:textSize="25sp" />
 
-    <TableLayout
+    <Button
+        android:id="@+id/Button01"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:stretchColumns="*" >
+        android:layout_height="wrap_content"
+  		style="@style/TextoAsteroides.Botones"
+        android:text="@string/Arrancar" />
 
-        <TableRow>
+    <Button
+        android:id="@+id/Button02"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+  		style="@style/TextoAsteroides.Botones"
+        android:text="@string/Configurar" />
 
-            <Button
-                android:id="@+id/Button01"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Arrancar" />
+    <Button
+        android:id="@+id/Button03"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+ 		style="@style/TextoAsteroides.Botones"
+        android:text="@string/Acercade" />
 
-            <Button
-                android:id="@+id/Button02"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Configurar" />
-        </TableRow>
-
-        <TableRow>
-
-            <Button
-                android:id="@+id/Button03"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Acercade" />
-
-            <Button
-                android:id="@+id/Button04"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Salir" />
-        </TableRow>
-    </TableLayout>
-
+    <Button
+        android:id="@+id/Button04"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+  		style="@style/TextoAsteroides.Botones"
+        android:text="@string/Salir" />
+ 
 </LinearLayout>

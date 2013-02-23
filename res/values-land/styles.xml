@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TextoAsteroides.Botones">
+		<item name="android:textSize">22sp</item>
+		<item name="android:textStyle">italic</item>
+		<item name="android:layout_marginTop">7dip</item>
+        <item name="android:layout_marginBottom">7dip</item>
+		<item name="android:layout_marginRight">7dip</item>
+	</style>
+
+</resources>
