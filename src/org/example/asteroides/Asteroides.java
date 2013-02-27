@@ -37,6 +37,13 @@ public class Asteroides extends Activity {
 				lanzarPreferencias(null);
 			}
 		});
+		bSalir =(Button) findViewById(R.id.Button01);
+		bSalir.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				Intent i = new Intent(getBaseContext(), Juego.class);
+				startActivity(i);
+			}
+		});
 
 	}
 
