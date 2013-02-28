@@ -36,7 +36,12 @@
             android:label="@string/Puntuaciones"
             android:name=".Puntuaciones"
             ></activity>
-        
+
+        <activity 
+            android:label="@string/Puntuaciones"
+            android:name=".Juego"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" android:screenOrientation="sensorLandscape"></activity>
+
     </application>
 
 </manifest>
