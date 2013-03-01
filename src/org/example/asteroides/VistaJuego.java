@@ -4,12 +4,18 @@ import java.util.List;
 import java.util.Vector;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,6 +45,16 @@ public class VistaJuego extends View implements SensorEventListener{
 	// Cuando se realizó el último proceso
 	private long ultimoProceso = 0;
 
+	// //// MISIL //////
+	private Grafico misil;
+	private static int PASO_VELOCIDAD_MISIL = 12;
+	private boolean misilActivo = false;
+	private int tiempoMisil;
+
+//	public VistaJuego() {
+//	
+//	}
+
 	@SuppressWarnings("deprecation")
 	public VistaJuego(Context context, AttributeSet attrs) {
 
@@ -49,9 +65,35 @@ public class VistaJuego extends View implements SensorEventListener{
 				R.drawable.asteroide1);
 		drawableNave = context.getResources().getDrawable(
 				R.drawable.nave);
-
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+		String graficos = sharedPref.getString("graficos", "0");
+//		String fragmentos = sharedPref.getString("graficos", "");
+		if(graficos.equals("0")){ // Vectorial
+			// Casos vectoriales
+			ShapeDrawable dMisil = new ShapeDrawable(new RectShape());
+			dMisil.getPaint().setColor(Color.WHITE);
+			dMisil.getPaint().setStyle(Style.STROKE);
+			dMisil.setIntrinsicWidth(15);
+			dMisil.setIntrinsicHeight(3);
+			drawableMisil = dMisil;
+		}
+		else if(graficos.equals("1")){ // Bitmap
+			//Gráficos bitmap
+			drawableMisil = context.getResources().getDrawable(
+					R.drawable.misil1);
+		}
+		else{ // Default
+			// Casos vectoriales
+			ShapeDrawable dMisil = new ShapeDrawable(new RectShape());
+			dMisil.getPaint().setColor(Color.WHITE);
+			dMisil.getPaint().setStyle(Style.STROKE);
+			dMisil.setIntrinsicWidth(15);
+			dMisil.setIntrinsicHeight(3);
+			drawableMisil = dMisil;
+		}
 		Asteroides = new Vector<Grafico>();
 		nave = new Grafico(this, drawableNave);
+		misil = new Grafico(this, drawableMisil);
 
 		for (int i = 0; i < numAsteroides; i++) {
 			Grafico asteroide = new Grafico(this, drawableAsteroide);
@@ -61,6 +103,8 @@ public class VistaJuego extends View implements SensorEventListener{
 			asteroide.setRotacion((int) (Math.random() * 8 - 4));
 			Asteroides.add(asteroide);
 		}
+
+		// Misil
 
 		// Sensores
 		SensorManager mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -137,18 +181,13 @@ public class VistaJuego extends View implements SensorEventListener{
 			giroNave = 0;
 			aceleracionNave = 0;
 			if (disparo){
-				ActivaMisil();
+				activaMisil();
 			}
 			break;
 		}
 		mX=x; mY=y;       
 		return true;
 	}
-	private void ActivaMisil() {
-		// TODO Auto-generated method stub
-
-	}
-
 
 	@Override
 	synchronized protected void onDraw(Canvas canvas) {
@@ -157,6 +196,23 @@ public class VistaJuego extends View implements SensorEventListener{
 			asteroide.dibujaGrafico(canvas);
 		}
 		nave.dibujaGrafico(canvas);
+		if( misilActivo ){
+			misil.dibujaGrafico(canvas);			
+		}
+	}
+
+
+	private void activaMisil() {
+		misil.setPosX(nave.getPosX()+ nave.getAncho()/2-misil.getAncho()/2);
+		misil.setPosY(nave.getPosY()+ nave.getAlto()/2-misil.getAlto()/2);
+		misil.setAngulo(nave.getAngulo());
+		misil.setIncX(Math.cos(Math.toRadians(misil.getAngulo())) *
+				PASO_VELOCIDAD_MISIL);
+		misil.setIncY(Math.sin(Math.toRadians(misil.getAngulo())) *
+				PASO_VELOCIDAD_MISIL);
+		tiempoMisil = (int) Math.min(this.getWidth() / Math.abs( misil.
+				getIncX()), this.getHeight() / Math.abs(misil.getIncY())) - 2;
+		misilActivo = true;
 	}
 
 
@@ -187,8 +243,26 @@ public class VistaJuego extends View implements SensorEventListener{
 		for (Grafico asteroide : Asteroides) {
 			asteroide.incrementaPos(retardo);
 		}
+
+		if (misilActivo) {
+			misil.incrementaPos(retardo);
+			tiempoMisil-=retardo;
+			if (tiempoMisil < 0) {
+				misilActivo = false;
+			} else {
+				for (int i = 0; i < Asteroides.size(); i++)
+					if (misil.verificaColision(Asteroides.elementAt(i))) {
+						destruyeAsteroide(i);
+						break;
+					}
+			}
+		}
 	}
 
+	private void destruyeAsteroide(int i) {
+		Asteroides.remove(i);
+		misilActivo = false;
+	}
 
 	class ThreadJuego extends Thread {
 		@Override
