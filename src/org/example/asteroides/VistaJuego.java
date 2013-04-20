@@ -51,9 +51,9 @@ public class VistaJuego extends View implements SensorEventListener{
 	private boolean misilActivo = false;
 	private int tiempoMisil;
 
-//	public VistaJuego() {
-//	
-//	}
+	//	public VistaJuego() {
+	//	
+	//	}
 
 	@SuppressWarnings("deprecation")
 	public VistaJuego(Context context, AttributeSet attrs) {
@@ -67,7 +67,7 @@ public class VistaJuego extends View implements SensorEventListener{
 				R.drawable.nave);
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 		String graficos = sharedPref.getString("graficos", "0");
-//		String fragmentos = sharedPref.getString("graficos", "");
+		//		String fragmentos = sharedPref.getString("graficos", "");
 		if(graficos.equals("0")){ // Vectorial
 			// Casos vectoriales
 			ShapeDrawable dMisil = new ShapeDrawable(new RectShape());
@@ -116,7 +116,12 @@ public class VistaJuego extends View implements SensorEventListener{
 					SensorManager.SENSOR_DELAY_GAME);
 		}
 	}
-
+	//TODO
+//	@Override
+//	protected void onResume() {
+//		super.onResume();
+//		Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+//	}
 
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy){}
@@ -265,13 +270,44 @@ public class VistaJuego extends View implements SensorEventListener{
 	}
 
 	class ThreadJuego extends Thread {
+		private boolean pausa,corriendo;
+
+		public synchronized void pausar() {
+			pausa = true;
+		}
+
+		public synchronized void reanudar() {
+			pausa = false;
+			notify();
+		}
+
+		public void detener() {
+			corriendo = false;
+			if (pausa) reanudar();
+		}
+
 		@Override
 		public void run() {
-			while (true) {
+			corriendo = true;
+			while (corriendo) {
 				actualizaFisica();
+				synchronized (this) {
+					while (pausa) {
+						try {
+							wait();
+						} catch (Exception e) {
+						}
+					}
+				}
 			}
+//			while (true) {
+//				actualizaFisica();
+//			}
 		}
 	}
 
+	public ThreadJuego getThread() {
+		return thread;
+	}
 
 }
