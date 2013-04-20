@@ -2,6 +2,7 @@ package org.example.asteroides;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +13,8 @@ import android.widget.Button;
 public class Asteroides extends Activity {
 
 	public static AlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
-
+	private MediaPlayer mp;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,7 +46,8 @@ public class Asteroides extends Activity {
 				startActivity(i);
 			}
 		});
-
+		
+		mp = MediaPlayer.create(this, R.raw.audio);
 	}
 
 	@Override
@@ -52,6 +55,35 @@ public class Asteroides extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		mp.start();
+	}
+	@Override
+	protected void onStop() {
+		super.onStop();
+		mp.pause();
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle saveInstance){
+		super.onSaveInstanceState(saveInstance);
+		if (mp != null) {
+			int pos = mp.getCurrentPosition();
+			saveInstance.putInt("posicionSonido", pos);
+		}
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstance){
+		super.onRestoreInstanceState(savedInstance);
+		if (savedInstance != null && mp != null) {
+			int pos = savedInstance.getInt("posicionSonido");
+			mp.seekTo(pos);
+		}
 	}
 
 	@Override
