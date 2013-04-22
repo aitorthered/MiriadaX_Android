@@ -13,7 +13,7 @@ import android.widget.Button;
 public class Asteroides extends Activity {
 
 	public static AlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
-	private MediaPlayer mp;
+//	private MediaPlayer mp;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,9 @@ public class Asteroides extends Activity {
 			}
 		});
 		
-		mp = MediaPlayer.create(this, R.raw.audio);
+//		mp = MediaPlayer.create(this, R.raw.audio);
+		startService(new Intent(Asteroides.this,
+                ServicioMusica.class));
 	}
 
 	@Override
@@ -60,30 +62,36 @@ public class Asteroides extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		mp.start();
+//		mp.start();
 	}
 	@Override
 	protected void onStop() {
 		super.onStop();
-		mp.pause();
+//		mp.pause();
+	}
+	@Override
+	protected void onDestroy(){
+		super.onDestroy();
+		stopService(new Intent(Asteroides.this,
+                ServicioMusica.class));
 	}
 	
 	@Override
 	protected void onSaveInstanceState(Bundle saveInstance){
 		super.onSaveInstanceState(saveInstance);
-		if (mp != null) {
-			int pos = mp.getCurrentPosition();
-			saveInstance.putInt("posicionSonido", pos);
-		}
+//		if (mp != null) {
+//			int pos = mp.getCurrentPosition();
+//			saveInstance.putInt("posicionSonido", pos);
+//		}
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstance){
 		super.onRestoreInstanceState(savedInstance);
-		if (savedInstance != null && mp != null) {
-			int pos = savedInstance.getInt("posicionSonido");
-			mp.seekTo(pos);
-		}
+//		if (savedInstance != null && mp != null) {
+//			int pos = savedInstance.getInt("posicionSonido");
+//			mp.seekTo(pos);
+//		}
 	}
 
 	@Override
