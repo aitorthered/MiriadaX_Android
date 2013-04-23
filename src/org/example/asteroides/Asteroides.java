@@ -49,6 +49,8 @@ public class Asteroides extends Activity {
 //		mp = MediaPlayer.create(this, R.raw.audio);
 		startService(new Intent(Asteroides.this,
                 ServicioMusica.class));
+		
+		almacen = new AlmacenPuntuacionesPreferencias(this);
 	}
 
 	@Override
