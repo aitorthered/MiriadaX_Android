@@ -17,6 +17,8 @@
         <item>Fichero en memoria interna</item>
         <item>Fichero en memoria externa</item>
         <item>Fichero en recursos Raw</item>
+        <item>Fichero XML</item>
+        <item>BBDD</item>
     </string-array>
     <string-array name="tiposSalvarPreferenciasValores">
         <item>0</item>
@@ -24,6 +26,8 @@
         <item>2</item>
         <item>3</item>
         <item>4</item>
-    </string-array>
+        <item>5</item>
+        <item>6</item>
+	</string-array>
     
 </resources>

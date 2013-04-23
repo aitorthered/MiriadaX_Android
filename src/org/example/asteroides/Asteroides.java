@@ -90,6 +90,9 @@ public class Asteroides extends Activity {
 		else if(puntuacion.equals("4")){ // 
 			almacen = new AlmacenPuntuacionesRecurso(this);
 		}
+		else if(puntuacion.equals("5")){ // 
+			almacen = new AlmacenPuntuacionesXML_SAX(this);
+		}
 		else{
 			almacen = new AlmacenPuntuacionesArray();
 		}
