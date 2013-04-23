@@ -83,6 +83,9 @@ public class Asteroides extends Activity {
 		}
 		else if(puntuacion.equals("2")){ // 
 			almacen = new AlmacenPuntuacionesFicheroInterno(this);
+		}
+		else if(puntuacion.equals("3")){ // 
+			almacen = new AlmacenPuntuacionesFicheroExterno(this);
 
 		}
 		else{
