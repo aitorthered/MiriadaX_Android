@@ -20,5 +20,13 @@
         android:key="fragmentos"
         android:summary="En cuantos trozos se divide un asteroide"
         android:title="Número de Fragmentos" />
+    
+    <ListPreference
+        android:defaultValue="0"
+        android:entries="@array/tiposSalvarPreferencias"
+        android:entryValues="@array/tiposSalvarPreferenciasValores"
+        android:key="puntuacion"
+        android:summary="Metodo de guardar preferencias"
+        android:title="Guardar preferencias" />
 
 </PreferenceScreen>

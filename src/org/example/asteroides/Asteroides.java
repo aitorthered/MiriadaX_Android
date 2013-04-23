@@ -2,8 +2,9 @@ package org.example.asteroides;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,9 +13,10 @@ import android.widget.Button;
 
 public class Asteroides extends Activity {
 
-	public static AlmacenPuntuaciones almacen = new AlmacenPuntuacionesArray();
-//	private MediaPlayer mp;
-	
+	private static final int GAME_ACTIVITY = 31415;
+	public static AlmacenPuntuaciones almacen; // = new AlmacenPuntuacionesArray();
+	//	private MediaPlayer mp;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,7 +28,7 @@ public class Asteroides extends Activity {
 				lanzarPuntuaciones(view);
 			}
 		});
-		
+
 		bSalir =(Button) findViewById(R.id.Button03);
 		bSalir.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
@@ -42,14 +44,26 @@ public class Asteroides extends Activity {
 		bSalir =(Button) findViewById(R.id.Button01);
 		bSalir.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
-				Intent i = new Intent(getBaseContext(), Juego.class);
-				startActivity(i);
+				lanzarJuego(null);
 			}
 		});
-		
-//		mp = MediaPlayer.create(this, R.raw.audio);
+
+		//		mp = MediaPlayer.create(this, R.raw.audio);
 		startService(new Intent(Asteroides.this,
-                ServicioMusica.class));
+				ServicioMusica.class));
+		//		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		//		String puntuacion = sharedPref.getString("puntuacion", "0");
+		//		if(puntuacion.equals("1")){ // 
+		//			almacen = new AlmacenPuntuacionesPreferencias(this);
+		//		}
+		//		else if(puntuacion.equals("2")){ // 
+		//			almacen = new AlmacenPuntuacionesFicheroInterno(this);
+		//
+		//		}
+		//		else{
+		//			almacen = new AlmacenPuntuacionesArray();
+		//		}
+
 	}
 
 	@Override
@@ -58,40 +72,64 @@ public class Asteroides extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
-//		mp.start();
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		String puntuacion = sharedPref.getString("puntuacion", "0");
+		if(puntuacion.equals("1")){ // 
+			almacen = new AlmacenPuntuacionesPreferencias(this);
+		}
+		else if(puntuacion.equals("2")){ // 
+			almacen = new AlmacenPuntuacionesFicheroInterno(this);
+		}
+		else if(puntuacion.equals("3")){ // 
+			almacen = new AlmacenPuntuacionesFicheroExterno(this);
+		}
+		else if(puntuacion.equals("4")){ // 
+			almacen = new AlmacenPuntuacionesRecurso(this);
+		}
+		else if(puntuacion.equals("5")){ // 
+			almacen = new AlmacenPuntuacionesXML_SAX(this);
+		}
+		else if(puntuacion.equals("6")){ // 
+			almacen = new AlmacenPuntuacionesSQLite(this);
+		}
+		else{
+			almacen = new AlmacenPuntuacionesArray();
+		}
+
+		//		mp.start();
 	}
 	@Override
 	protected void onStop() {
 		super.onStop();
-//		mp.pause();
+		//		mp.pause();
 	}
 	@Override
 	protected void onDestroy(){
 		super.onDestroy();
 		stopService(new Intent(Asteroides.this,
-                ServicioMusica.class));
+				ServicioMusica.class));
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle saveInstance){
 		super.onSaveInstanceState(saveInstance);
-//		if (mp != null) {
-//			int pos = mp.getCurrentPosition();
-//			saveInstance.putInt("posicionSonido", pos);
-//		}
+		//		if (mp != null) {
+		//			int pos = mp.getCurrentPosition();
+		//			saveInstance.putInt("posicionSonido", pos);
+		//		}
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstance){
 		super.onRestoreInstanceState(savedInstance);
-//		if (savedInstance != null && mp != null) {
-//			int pos = savedInstance.getInt("posicionSonido");
-//			mp.seekTo(pos);
-//		}
+		//		if (savedInstance != null && mp != null) {
+		//			int pos = savedInstance.getInt("posicionSonido");
+		//			mp.seekTo(pos);
+		//		}
 	}
 
 	@Override
@@ -122,5 +160,24 @@ public class Asteroides extends Activity {
 
 		startActivity(i);
 
+	}
+
+	private void lanzarJuego(View view) {
+		Intent i = new Intent(getBaseContext(), Juego.class);
+		startActivityForResult(i, GAME_ACTIVITY);
+	}
+
+	@Override 
+	protected void onActivityResult (int requestCode, int resultCode, Intent data){
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode==GAME_ACTIVITY & resultCode==RESULT_OK & data!=null) {
+			int puntuacion = data.getExtras().getInt("puntuacion");
+			String nombre = "Yo";
+			// Mejor leerlo desde un Dialog o una nueva actividad
+			//AlertDialog.Builder
+			almacen.guardarPuntuacion(puntuacion, nombre,
+					System.currentTimeMillis());
+			lanzarPuntuaciones(null);
+		}
 	}
 }
