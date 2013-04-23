@@ -3,7 +3,9 @@ package org.example.asteroides;
 import java.util.List;
 import java.util.Vector;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,6 +17,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -50,7 +53,9 @@ public class VistaJuego extends View implements SensorEventListener{
 	private static int PASO_VELOCIDAD_MISIL = 12;
 	private boolean misilActivo = false;
 	private int tiempoMisil;
-
+	
+	private int puntuacion = 0;
+	private Activity padre;
 	//	public VistaJuego() {
 	//	
 	//	}
@@ -262,11 +267,33 @@ public class VistaJuego extends View implements SensorEventListener{
 					}
 			}
 		}
+		for (Grafico asteroide : Asteroides) {
+			if (asteroide.verificaColision(nave)) {
+				salir();
+			}
+		}
 	}
 
 	private void destruyeAsteroide(int i) {
 		Asteroides.remove(i);
 		misilActivo = false;
+		puntuacion += 1000;
+		if (Asteroides.isEmpty()) {
+			salir();
+		}
+	}
+	
+	public void setPadre(Activity padre){
+		this.padre = padre;
+	}
+
+	private void salir() {
+		Bundle bundle = new Bundle();
+		bundle.putInt("puntuacion", puntuacion);
+		Intent intent = new Intent();
+		intent.putExtras(bundle);
+		padre.setResult(Activity.RESULT_OK, intent);
+		padre.finish();
 	}
 
 	class ThreadJuego extends Thread {
