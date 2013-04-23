@@ -37,8 +37,9 @@ public class AlmacenPuntuacionesSQLite extends SQLiteOpenHelper implements Almac
 	public Vector<String> listaPuntuaciones(int cantidad) {
 		Vector<String> result = new Vector<String>();
 		SQLiteDatabase db = getReadableDatabase();
-		Cursor cursor = db.rawQuery("SELECT puntos, nombre FROM " +
-				"puntuaciones ORDER BY puntos DESC LIMIT " +cantidad, null);
+		String[] CAMPOS = {"puntos", "nombre"};
+		Cursor cursor=db.query("puntuaciones", CAMPOS, null, null,
+				null, null, "puntos DESC", Integer.toString(cantidad));
 		while (cursor.moveToNext()){
 			result.add(cursor.getInt(0)+" " +cursor.getString(1));
 		}
